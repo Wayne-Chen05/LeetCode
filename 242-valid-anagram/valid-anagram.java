@@ -1,15 +1,30 @@
 class Solution {
     public boolean isAnagram(String s, String t) {
-        char[] arrS = s.toCharArray();
-        char[] arrT = t.toCharArray();
-
-        Arrays.sort(arrS);
-        Arrays.sort(arrT);
-
-        if (Arrays.equals(arrS, arrT))
+        if (s == null || t == null)
         {
-            return true;
+            return false;
         }
-        return false;
+
+        if (s.length() != t.length())
+        {
+            return false;
+        }
+
+        int[] counts = new int[26];
+
+        for (int i = 0; i < s.length(); i++)
+        {
+            counts[s.charAt(i) - 'a']++;
+            counts[t.charAt(i) - 'a']--;
+        }   
+
+        for (int c : counts) 
+        {
+            if (c != 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
