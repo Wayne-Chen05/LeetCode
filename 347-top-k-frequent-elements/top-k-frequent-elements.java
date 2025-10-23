@@ -6,37 +6,39 @@ class Solution {
         }
 
         Map<Integer, Integer> frequencyMap = new HashMap<>();
-        Set<Integer> seen = new HashSet<>();
 
-        for (int i = 0; i < nums.length; i++)
+        for (int num : nums)
         {
-            int value = nums[i];
-            if (seen.contains(value))
-            {
-                continue;
-            }
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        }
 
-            int count = 0;
-            for (int j = 0; j < nums.length; j++)
+        List<Integer> bucket[] = new ArrayList[nums.length + 1];
+
+        for (int key : frequencyMap.keySet()) {
+            int frequency = frequencyMap.get(key);
+            if (bucket[frequency] == null) 
             {
-                if (nums[j] == value)
+                bucket[frequency] = new ArrayList<>();
+            } 
+            bucket[frequency].add(key);
+        }
+
+        int[] result = new int[k];
+        int index = 0;
+        for (int i = bucket.length - 1; i >= 0; i--)
+        {
+            if (bucket[i] != null)
+            {
+                for (int val : bucket[i])
                 {
-                    count++;
+                    result[index++] = val;
+                    if (index == k)
+                    {
+                        return result;
+                    }
                 }
             }
-
-            frequencyMap.put(value, count);
-            seen.add(value);
         }
-
-        List<Map.Entry<Integer, Integer>> entries = new ArrayList<>(frequencyMap.entrySet());
-        Collections.sort(entries, Collections.reverseOrder(Map.Entry.comparingByValue()));
-        int[] results = new int[k];
-        for (int i = 0; i < k; i++)
-        {
-            results[i] = entries.get(i).getKey();
-        }
-
-        return results;
+        return result;
     }
 }
